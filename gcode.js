@@ -35,7 +35,7 @@ var stl;
 
 var model = 'https://myindustryworld.com/z/designs/100000027files/10000002720180202Super_Mario_Question_Block_Switch_Case.stl';
 
- var camera, scene, renderer,u1,layht,controls,pgcd,gcodes = [],dne = 0,lval,efac = 30,
+ var camera, scene1, renderer,u1,layht,controls,pgcd,gcodes = [],dne = 0,lval,efac = 30,
             geometry, material, mesh, light1, stats,points,line2 =[],pattern,printer;
 var geom = new THREE.Geometry();
            var si = 0.3,pd = 5,exd = 0.3,sia = 0.2;
@@ -500,7 +500,7 @@ console.log('Slicing...'+k+'%'); kmax =k;
 		//console.log(seg);
 		//console.log(layers);
 			boundbox(geom);		
-                scene = new THREE.Scene();
+                scene1 = new THREE.Scene();
                  var geom1 = new THREE.SphereGeometry( 10,100);
 				 
 				  
@@ -544,16 +544,16 @@ for(var y=0;y< outer.length; y++){
 ln = y;
 for(var i=0;i< inner[ln].length;i++){
 var line3 = new THREE.Line(inner[ln][i], new THREE.LineBasicMaterial({color: "blue"}));
-scene.add(line3);line3.rotation.x = -1;line3.rotation.z = 1;
+scene1.add(line3);line3.rotation.x = -1;line3.rotation.z = 1;
 }
 for(var i=0;i< outer[ln].length;i++){
 var line4 = new THREE.Line(outer[ln][i], new THREE.LineBasicMaterial({color: "blue"}));
-scene.add(line4);line4.rotation.x = -1;line4.rotation.z = 1;
+scene1.add(line4);line4.rotation.x = -1;line4.rotation.z = 1;
 }
 for(var i=0;i< layers[ln].length;i++){
 	var ii = i; if(i > 10){ii = i%10;}
  line2[i] = new THREE.Line(layers[ln][i], new THREE.LineBasicMaterial({color: "blue"}));
-scene.add(line2[i]);;line2[i].rotation.x = -1;line2[i].rotation.z = 1;
+scene1.add(line2[i]);;line2[i].rotation.x = -1;line2[i].rotation.z = 1;
 }
 }
 ln = 0;
