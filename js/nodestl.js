@@ -1,7 +1,7 @@
 var fs = require('fs');
 var THREE = require('three');
 
-var Geom = new THREE.Geometry();
+
 // Vertex
 function Vertex (v1,v2,v3) {
 	this.v1 = Number(v1);
@@ -109,7 +109,7 @@ function _parseSTLBinary (buf) {
 	dataOffset		= 84,
 	faceLength		= 12*4 + 2,
 	le = true; // is little-endian
-
+var Geom = new THREE.Geometry();
 	var 
 	dvTriangleCount	= new DataView(buf, headerLength, 4),
 	numTriangles	= dvTriangleCount.getUint32(0, le),
