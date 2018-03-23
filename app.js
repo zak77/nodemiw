@@ -57,9 +57,10 @@ function toArrayBuffer(buffer) {
   }
   return ab;
 }
-function saveSTL( scene, name,callback){  
+function saveSTL( myscene, name,callback){  
   var exporter = new StlExporter();
-  var stlString = exporter.parse( scene );
+  var stlString = exporter.parse( myscene );
+  console.log('scenes',myscene.children[0].geometry.vertices.length,stlString.length);
 // console.log('stl= '+stlString);
  fs.writeFile(name, stlString, (err) => {
   if (err) throw err;
@@ -106,15 +107,8 @@ fs.writeFile(filen, "ZEESHAN Ahmad khan", function(err) {
 
     console.log("The file was saved!");
 }); 
-function loadFont(text1,positionx,positiony,positionz,rotationx,rotationy,rotationz,textheight,textsize,callback) {
-				/*var loader = new THREE.FontLoader();
-				loader.load( 'fonts/gentilis_regular.typeface.json', function ( response ) {
-					font = response;
-					console.log('textloder');
-					console.log('res '+response,'font '+font);
-					//refreshText();
-					*/
-					
+function loadFont(scenez,text1,positionx,positiony,positionz,rotationx,rotationy,rotationz,textheight,textsize,callback) {
+				
 			
 			fs.readFile('font.json', 'utf8', function ( err, data){
 				var fontjson = JSON.parse(data); 
@@ -140,16 +134,17 @@ function loadFont(text1,positionx,positiony,positionz,rotationx,rotationy,rotati
 				console.log('height '+textheight,'x- '+rotationx,'y- '+rotationy,'z- '+rotationz,positionx,positiony,positionz);
                      var textmesh = new THREE.Mesh( textGeo, material );
 					 //textmesh.scale.x = -1;
-					 textmesh.position.set(50,0,-100);
-					 textmesh.rotation.y = Math.PI;
+				//	 textmesh.position.set(50,0,-100);
+					// textmesh.rotation.y = Math.PI;
 					
-					 scene.add(textmesh);
+					 scenez.add(textmesh);
 					 
 					 
 			console.log(text1,'-ppt');
 			var Rx = Math.floor((Math.random() * 100000) + 1);
 			const file1 = fs.createWriteStream('tempstl/'+Rx+'tempstl.stl');
-			saveSTL(scene,'tempstl/'+Rx+'tempstl.stl',function(){
+			saveSTL(scenez,'tempstl/'+Rx+'tempstl.stl',function(){
+				
 			 //res.sendFile('tempcutome.stl');
 			callback(Rx);
 			});
@@ -203,9 +198,14 @@ app.get('/merge', function(req, res){
   //http://localhost:3000/merge?file=https://myindustryworld.com/z/designs/100000017files/10000001720171229iphone7.stl&textval=Zeeshan&pos=(2,0,0)&rotx=1.2&roty=0.2&rotz=0&height=3&size=12
  //const file1 = fs.createWriteStream('tempstl/'+Rx+'tempstl.stl');
 var requestSettings = { method: 'GET', url: partfile,  encoding: null,};
+console.log(partfile);
 request(requestSettings, function(error, response, body) {
    var Nstl = new NodeStl(body);
+  console.log('geom bef',Nstl.Geometry.vertices.length)
    var geom = Nstl.Geometry;
+  
+      console.log('geom',geom.vertices.length,Nstl.Geometry.vertices.length); 
+	
    geom.computeBoundingBox();
 				var box = geom.boundingBox;
 				//console.log( geo.boundingBox.max.x-geo.boundingBox.min.x,geo.boundingBox.max.y-geo.boundingBox.min.y,geo.boundingBox.max.z-geo.boundingBox.min.z );
@@ -216,12 +216,14 @@ request(requestSettings, function(error, response, body) {
 				console.log( -box.min.x, -box.min.y, -box.min.z,-box.max.x, -box.max.y, -box.max.z );
 				
 				geom.translate( -(box.min.x+wl/2), -(box.min.y+b/2), -box.min.z );
-	scene = new THREE.Scene();			
+	var scenez = new THREE.Scene();			
 				
 	var partmesh = new THREE.Mesh(Nstl.Geometry,material);
 	//console.log(Nstl.Geometry);
-	var tmesh = loadFont(customtext,posx,posy,posz,rotx,roty,rotz,theight,tsize,function(Rx){res.sendFile(__dirname +'/tempstl/'+Rx+'tempstl.stl');});
-	scene.add(partmesh);
+	scenez.add(partmesh);
+	var tmesh = loadFont(scenez,customtext,posx,posy,posz,rotx,roty,rotz,theight,tsize,function(Rx){
+		res.sendFile(__dirname +'/tempstl/'+Rx+'tempstl.stl');});
+	  
 	//scene.add(tmesh);
 //console.log(scene.children)
 	
