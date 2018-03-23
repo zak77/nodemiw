@@ -279,7 +279,7 @@ if(layerheight){console.log('lh='+layerheight+'pd = '+pd+'printer = '+printer+'m
 //});
 });
 });
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');
